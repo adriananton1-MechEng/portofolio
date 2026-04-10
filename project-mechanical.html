@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mechanical Design — Adrian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0c0f; --bg2: #10141a; --bg3: #161c25;
+    --accent: #a8ff78; --text: #e8edf2; --muted: #5a6a7a;
+    --border: rgba(168,255,120,0.15);
+    --mono: 'Share Tech Mono', monospace;
+    --display: 'Syne', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--display); overflow-x: hidden; }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(168,255,120,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(168,255,120,0.02) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none; z-index: 0;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(10,12,15,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 0.1em; text-decoration: none; }
+  .nav-back { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 0.12em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .nav-back::before { content: '←'; }
+  .nav-back:hover { color: var(--accent); }
+
+  .project-hero { position: relative; z-index: 1; padding: 10rem 4rem 4rem; border-bottom: 1px solid var(--border); background: var(--bg2); }
+  .breadcrumb { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .breadcrumb span { color: var(--accent); }
+  .project-title { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 1.5rem; }
+  .project-title span { color: var(--accent); }
+  .project-meta-row { display: flex; gap: 3rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+  .meta-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px; }
+  .meta-value { font-size: 0.95rem; color: var(--text); }
+  .hero-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border: 1px solid var(--border); color: var(--muted); background: rgba(168,255,120,0.04); }
+  .tag.accent { border-color: var(--accent); color: var(--accent); }
+
+  .project-body { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 5rem 4rem; }
+
+  .img-hero { width: 100%; height: 480px; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; margin-bottom: 5rem; position: relative; overflow: hidden; }
+  .img-hero::after { content: 'ADD YOUR MAIN PROJECT IMAGE HERE'; font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.15em; position: absolute; bottom: 20px; right: 24px; }
+  .img-hero svg { opacity: 0.15; }
+
+  .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 5rem; }
+  .img-slot { background: var(--bg3); border: 1px solid var(--border); height: 280px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .img-slot::after { content: attr(data-label); font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.12em; position: absolute; bottom: 12px; right: 14px; }
+  .img-slot svg { opacity: 0.12; }
+
+  .content-section { margin-bottom: 4rem; }
+  .section-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 10px; }
+  .section-label::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--accent); }
+  .section-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+  .prose { font-size: 1rem; color: #9aabb8; line-height: 1.85; }
+  .prose + .prose { margin-top: 1rem; }
+  .prose strong { color: var(--text); font-weight: 700; }
+
+  .specs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2px; margin-top: 2rem; margin-bottom: 4rem; }
+  .spec-card { background: var(--bg3); border: 1px solid var(--border); padding: 1.5rem; }
+  .spec-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+  .spec-value { font-size: 1.3rem; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+
+  .process-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2px; margin-top: 2rem; }
+  .step-card { background: var(--bg3); border: 1px solid var(--border); padding: 1.75rem; position: relative; }
+  .step-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--accent); opacity: 0.4; }
+  .step-num { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 0.75rem; }
+  .step-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .step-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+
+  .btn-ghost { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; padding: 13px 32px; background: transparent; color: var(--text); border: 1px solid var(--border); cursor: pointer; text-decoration: none; display: inline-block; transition: border-color 0.2s, color 0.2s; }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .project-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 5rem; border-top: 1px solid var(--border); padding-top: 3rem; }
+  .proj-nav-card { background: var(--bg3); border: 1px solid var(--border); padding: 1.75rem; text-decoration: none; color: var(--text); transition: border-color 0.3s; display: block; }
+  .proj-nav-card:hover { border-color: rgba(168,255,120,0.4); }
+  .proj-nav-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.6rem; }
+  .proj-nav-title { font-size: 1rem; font-weight: 700; }
+  .proj-nav-card.next { text-align: right; }
+
+  footer { position: relative; z-index: 1; padding: 2rem 4rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .footer-text { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .project-hero { padding: 8rem 1.5rem 3rem; }
+    .project-body { padding: 3rem 1.5rem; }
+    .img-grid-2 { grid-template-columns: 1fr; }
+    .project-nav { grid-template-columns: 1fr; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">ADRIAN.ENG</a>
+  <a href="index.html" class="nav-back">All projects</a>
+</nav>
+
+<div class="project-hero">
+  <div class="breadcrumb">Projects / <span>03 — Mechanical Design</span></div>
+  <h1 class="project-title">Your Project<br><span>Title Here</span></h1>
+  <div class="project-meta-row">
+    <div class="meta-item"><div class="meta-label">Year</div><div class="meta-value">20XX</div></div>
+    <div class="meta-item"><div class="meta-label">Type</div><div class="meta-value">Your project type</div></div>
+    <div class="meta-item"><div class="meta-label">Role</div><div class="meta-value">Your role</div></div>
+    <div class="meta-item"><div class="meta-label">Context</div><div class="meta-value">University / Personal</div></div>
+  </div>
+  <div class="hero-tags">
+    <span class="tag accent">Add tag</span>
+    <span class="tag">Add tag</span>
+    <span class="tag">Add tag</span>
+  </div>
+</div>
+
+<div class="project-body">
+
+  <div class="img-hero fade-in">
+    <!-- Replace with: <img src="images/proj3-main.jpg" alt="Project name" style="width:100%;height:100%;object-fit:cover;"> -->
+    <svg width="200" height="120" viewBox="0 0 200 120" fill="none">
+      <circle cx="60" cy="60" r="45" stroke="#a8ff78" stroke-width="1.5"/>
+      <circle cx="140" cy="60" r="45" stroke="#a8ff78" stroke-width="1.5"/>
+      <circle cx="60" cy="60" r="15" stroke="#a8ff78" stroke-width="1"/>
+      <circle cx="140" cy="60" r="15" stroke="#a8ff78" stroke-width="1"/>
+      <line x1="105" y1="60" x2="95" y2="60" stroke="#a8ff78" stroke-width="2"/>
+    </svg>
+  </div>
+
+  <div class="content-section fade-in">
+    <div class="section-label">Overview</div>
+    <div class="section-title">About this project</div>
+    <p class="prose">Replace this placeholder with a description of your third project. Explain the problem you were solving, the context (a university assignment, personal build, team competition), and what made it interesting from an engineering point of view.</p>
+    <p class="prose">Add a second paragraph here going deeper into your <strong>design decisions</strong>, trade-offs, and any constraints you had to work within — budget, weight, material, manufacturing method, etc.</p>
+  </div>
+
+  <div class="content-section fade-in">
+    <div class="section-label">Specifications</div>
+    <div class="section-title">Key numbers</div>
+    <div class="specs-grid">
+      <div class="spec-card"><div class="spec-label">Parameter 1</div><div class="spec-value">— unit</div></div>
+      <div class="spec-card"><div class="spec-label">Parameter 2</div><div class="spec-value">— unit</div></div>
+      <div class="spec-card"><div class="spec-label">Parameter 3</div><div class="spec-value">— unit</div></div>
+      <div class="spec-card"><div class="spec-label">Parameter 4</div><div class="spec-value">— unit</div></div>
+    </div>
+  </div>
+
+  <div class="img-grid-2 fade-in">
+    <div class="img-slot" data-label="ADD IMAGE 1">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="5" y="5" width="50" height="50" stroke="#a8ff78" stroke-width="1"/><circle cx="30" cy="30" r="15" stroke="#a8ff78" stroke-width="1"/></svg>
+    </div>
+    <div class="img-slot" data-label="ADD IMAGE 2">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><polygon points="30,5 55,50 5,50" stroke="#a8ff78" stroke-width="1" fill="none"/></svg>
+    </div>
+  </div>
+
+  <div class="content-section fade-in">
+    <div class="section-label">Process</div>
+    <div class="section-title">How it was built</div>
+    <div class="process-steps">
+      <div class="step-card">
+        <div class="step-num">PHASE 01</div>
+        <div class="step-title">Your phase title</div>
+        <p class="step-desc">Describe what happened in this phase. What decisions were made? What tools or methods did you use?</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">PHASE 02</div>
+        <div class="step-title">Your phase title</div>
+        <p class="step-desc">Describe what happened in this phase. What decisions were made? What tools or methods did you use?</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">PHASE 03</div>
+        <div class="step-title">Your phase title</div>
+        <p class="step-desc">Describe what happened in this phase. What was the final outcome and how did you validate it?</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-section fade-in">
+    <div class="section-label">Outcome</div>
+    <div class="section-title">Results</div>
+    <p class="prose">Describe the final outcome of the project. Did it meet its requirements? What were the measured results vs the predicted ones? What would you improve if you did it again?</p>
+    <br>
+    <a href="#" class="btn-ghost">View documentation →</a>
+  </div>
+
+  <div class="project-nav fade-in">
+    <a href="project-cad.html" class="proj-nav-card">
+      <div class="proj-nav-label">← Previous</div>
+      <div class="proj-nav-title">SolidWorks Assembly</div>
+    </a>
+    <a href="index.html" class="proj-nav-card next">
+      <div class="proj-nav-label">Back to all →</div>
+      <div class="proj-nav-title">All projects</div>
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-text">© 2025 Adrian — Mechanical Engineer</span>
+  <span class="footer-text">Bucharest, Romania</span>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

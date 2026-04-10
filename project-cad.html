@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SolidWorks Assembly — Adrian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0c0f; --bg2: #10141a; --bg3: #161c25;
+    --accent: #ff6b35; --text: #e8edf2; --muted: #5a6a7a;
+    --border: rgba(255,107,53,0.15);
+    --mono: 'Share Tech Mono', monospace;
+    --display: 'Syne', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--display); overflow-x: hidden; }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(255,107,53,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,107,53,0.02) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none; z-index: 0;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(10,12,15,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,107,53,0.15);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 0.1em; text-decoration: none; }
+  .nav-back { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 0.12em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .nav-back::before { content: '←'; }
+  .nav-back:hover { color: var(--accent); }
+
+  .project-hero { position: relative; z-index: 1; padding: 10rem 4rem 4rem; border-bottom: 1px solid var(--border); background: var(--bg2); }
+  .breadcrumb { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .breadcrumb span { color: var(--accent); }
+  .project-title { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 1.5rem; }
+  .project-title span { color: var(--accent); }
+  .project-meta-row { display: flex; gap: 3rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+  .meta-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px; }
+  .meta-value { font-size: 0.95rem; color: var(--text); }
+  .hero-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border: 1px solid var(--border); color: var(--muted); background: rgba(255,107,53,0.04); }
+  .tag.accent { border-color: var(--accent); color: var(--accent); }
+
+  .project-body { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 5rem 4rem; }
+
+  .img-hero { width: 100%; height: 480px; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; margin-bottom: 5rem; position: relative; overflow: hidden; }
+  .img-hero::after { content: 'ADD YOUR MAIN PROJECT IMAGE HERE'; font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 0.15em; position: absolute; bottom: 20px; right: 24px; }
+  .img-hero svg { opacity: 0.15; }
+
+  .img-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; margin-bottom: 5rem; }
+  .img-slot { background: var(--bg3); border: 1px solid var(--border); height: 220px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .img-slot::after { content: attr(data-label); font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.12em; position: absolute; bottom: 12px; right: 14px; }
+  .img-slot svg { opacity: 0.12; }
+
+  .content-section { margin-bottom: 4rem; }
+  .section-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 10px; }
+  .section-label::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--accent); }
+  .section-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+  .prose { font-size: 1rem; color: #9aabb8; line-height: 1.85; }
+  .prose + .prose { margin-top: 1rem; }
+  .prose strong { color: var(--text); font-weight: 700; }
+
+  .specs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2px; margin-top: 2rem; margin-bottom: 4rem; }
+  .spec-card { background: var(--bg3); border: 1px solid var(--border); padding: 1.5rem; }
+  .spec-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+  .spec-value { font-size: 1.3rem; font-weight: 800; color: var(--accent); letter-spacing: -0.02em; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2rem; }
+  .checklist { list-style: none; }
+  .checklist li { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; color: #9aabb8; line-height: 1.6; }
+  .checklist li::before { content: '✓'; color: var(--accent); font-family: var(--mono); flex-shrink: 0; }
+
+  .btn-ghost { font-family: var(--mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; padding: 13px 32px; background: transparent; color: var(--text); border: 1px solid rgba(255,107,53,0.3); cursor: pointer; text-decoration: none; display: inline-block; transition: border-color 0.2s, color 0.2s; }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .project-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 5rem; border-top: 1px solid var(--border); padding-top: 3rem; }
+  .proj-nav-card { background: var(--bg3); border: 1px solid var(--border); padding: 1.75rem; text-decoration: none; color: var(--text); transition: border-color 0.3s; display: block; }
+  .proj-nav-card:hover { border-color: rgba(255,107,53,0.4); }
+  .proj-nav-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.6rem; }
+  .proj-nav-title { font-size: 1rem; font-weight: 700; }
+  .proj-nav-card.next { text-align: right; }
+
+  footer { position: relative; z-index: 1; padding: 2rem 4rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .footer-text { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .project-hero { padding: 8rem 1.5rem 3rem; }
+    .project-body { padding: 3rem 1.5rem; }
+    .img-grid-3 { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .project-nav { grid-template-columns: 1fr; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">ADRIAN.ENG</a>
+  <a href="index.html" class="nav-back">All projects</a>
+</nav>
+
+<div class="project-hero">
+  <div class="breadcrumb">Projects / <span>02 — CAD Design</span></div>
+  <h1 class="project-title">SolidWorks<br><span>Assembly</span></h1>
+  <div class="project-meta-row">
+    <div class="meta-item"><div class="meta-label">Year</div><div class="meta-value">2023</div></div>
+    <div class="meta-item"><div class="meta-label">Type</div><div class="meta-value">CAD & drawing package</div></div>
+    <div class="meta-item"><div class="meta-label">Role</div><div class="meta-value">Designer</div></div>
+    <div class="meta-item"><div class="meta-label">Software</div><div class="meta-value">SolidWorks 2023</div></div>
+  </div>
+  <div class="hero-tags">
+    <span class="tag accent">SolidWorks</span>
+    <span class="tag">GD&T</span>
+    <span class="tag">Tolerance analysis</span>
+    <span class="tag">Technical drawings</span>
+    <span class="tag">BOM</span>
+  </div>
+</div>
+
+<div class="project-body">
+
+  <div class="img-hero fade-in">
+    <!-- <img src="images/cad-main.jpg" alt="SolidWorks assembly render" style="width:100%;height:100%;object-fit:cover;"> -->
+    <svg width="220" height="130" viewBox="0 0 220 130" fill="none">
+      <rect x="10" y="10" width="200" height="110" stroke="#ff6b35" stroke-width="1.5"/>
+      <rect x="30" y="30" width="160" height="70" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="10" y1="10" x2="30" y2="30" stroke="#ff6b35" stroke-width="0.8"/>
+      <line x1="210" y1="10" x2="190" y2="30" stroke="#ff6b35" stroke-width="0.8"/>
+      <line x1="10" y1="120" x2="30" y2="100" stroke="#ff6b35" stroke-width="0.8"/>
+      <line x1="210" y1="120" x2="190" y2="100" stroke="#ff6b35" stroke-width="0.8"/>
+      <circle cx="110" cy="65" r="25" stroke="#ff6b35" stroke-width="1"/>
+      <circle cx="110" cy="65" r="10" stroke="#ff6b35" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <div class="content-section fade-in">
+    <div class="section-label">Overview</div>
+    <div class="section-title">Project description</div>
+    <p class="prose">Replace this with a description of your SolidWorks assembly project. What was it? What was the design challenge? Who was it for (university course, personal project, team project)?</p>
+    <p class="prose">Describe the key engineering decisions you made — <strong>material selection</strong>, joint types, fastener choices, or any design trade-offs. This is where you show your depth of thinking, not just the final result.</p>
+  </div>
+
+  <div class="content-section fade-in">
+    <div class="section-label">Specifications</div>
+    <div class="section-title">Assembly overview</div>
+    <div class="specs-grid">
+      <div class="spec-card"><div class="spec-label">Total parts</div><div class="spec-value">— pcs</div></div>
+      <div class="spec-card"><div class="spec-label">Unique components</div><div class="spec-value">— pcs</div></div>
+      <div class="spec-card"><div class="spec-label">Drawing sheets</div><div class="spec-value">— sheets</div></div>
+      <div class="spec-card"><div class="spec-label">Material</div><div class="spec-value" style="font-size:1rem;">Add yours</div></div>
+    </div>
+  </div>
+
+  <div class="img-grid-3 fade-in">
+    <div class="img-slot" data-label="PART DRAWING">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="5" y="5" width="50" height="50" stroke="#ff6b35" stroke-width="1"/><line x1="5" y1="15" x2="55" y2="15" stroke="#ff6b35" stroke-width="0.5"/><line x1="15" y1="5" x2="15" y2="55" stroke="#ff6b35" stroke-width="0.5"/></svg>
+    </div>
+    <div class="img-slot" data-label="ASSEMBLY VIEW">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="10" y="15" width="40" height="30" stroke="#ff6b35" stroke-width="1"/><circle cx="30" cy="30" r="10" stroke="#ff6b35" stroke-width="1"/></svg>
+    </div>
+    <div class="img-slot" data-label="SECTION VIEW">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="5" y="5" width="50" height="50" stroke="#ff6b35" stroke-width="1"/><line x1="30" y1="5" x2="30" y2="55" stroke="#ff6b35" stroke-width="1" stroke-dasharray="4,3"/></svg>
+    </div>
+  </div>
+
+  <div class="content-section fade-in">
+    <div class="section-label">Deliverables</div>
+    <div class="section-title">What was produced</div>
+    <div class="two-col">
+      <ul class="checklist">
+        <li>Fully parametric SolidWorks part models with design intent</li>
+        <li>Top-level assembly with all mates and motion constraints</li>
+        <li>Tolerance stack-up analysis on critical dimensions</li>
+        <li>Interference detection check across full range of motion</li>
+        <li>Add your own deliverable here</li>
+      </ul>
+      <ul class="checklist">
+        <li>Complete drawing package with GD&T annotations</li>
+        <li>Bill of materials (BOM) with part numbers and quantities</li>
+        <li>Exploded view drawing for assembly instructions</li>
+        <li>Section views to show internal geometry</li>
+        <li>Add your own deliverable here</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="content-section fade-in">
+    <div class="section-label">Reflections</div>
+    <div class="section-title">Key learnings</div>
+    <p class="prose">Write a short paragraph about what this project taught you. Maybe it was the first time you had to deal with a complex tolerance chain, or you learned how to use a specific SolidWorks feature like configurations or design tables. Recruiters value self-awareness in engineers.</p>
+    <br>
+    <a href="#" class="btn-ghost">View drawing package →</a>
+  </div>
+
+  <div class="project-nav fade-in">
+    <a href="project-rover.html" class="proj-nav-card">
+      <div class="proj-nav-label">← Previous</div>
+      <div class="proj-nav-title">Rocker-Bogie Rover</div>
+    </a>
+    <a href="project-mechanical.html" class="proj-nav-card next">
+      <div class="proj-nav-label">Next project →</div>
+      <div class="proj-nav-title">Mechanical Design</div>
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-text">© 2025 Adrian — Mechanical Engineer</span>
+  <span class="footer-text">Bucharest, Romania</span>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
