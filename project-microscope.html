@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microscope Inspection Table — Adrian Anton</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0c0f; --bg2: #10141a; --bg3: #161c25;
+    --accent: #00d4ff; --purple: #a770ff;
+    --text: #e8edf2; --muted: #5a6a7a;
+    --border: rgba(0,212,255,0.15);
+    --border-o: rgba(167,112,255,0.2);
+    --mono: 'Share Tech Mono', monospace;
+    --display: 'Syne', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--display); overflow-x: hidden; }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(167,112,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(167,112,255,0.02) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none; z-index: 0;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(10,12,15,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-o);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--purple); letter-spacing: 0.1em; text-decoration: none; }
+  .nav-back { font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration: none; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.2s; display: flex; align-items: center; gap: 8px; }
+  .nav-back:hover { color: var(--purple); }
+  .nav-back::before { content: '←'; }
+
+  .hero {
+    position: relative; z-index: 1;
+    padding: 9rem 4rem 5rem;
+    border-bottom: 1px solid var(--border-o);
+  }
+  .hero-tag {
+    font-family: var(--mono); font-size: 12px; color: var(--purple);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px;
+  }
+  .hero-tag::before { content: ''; display: inline-block; width: 32px; height: 1px; background: var(--purple); }
+  h1 {
+    font-family: var(--display); font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 800; line-height: 1.05; letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+  h1 span { color: var(--purple); }
+  .hero-sub { font-size: 1.05rem; color: var(--muted); line-height: 1.75; max-width: 600px; margin-bottom: 2.5rem; }
+  .meta-strip {
+    display: flex; flex-wrap: wrap; gap: 2rem;
+    border-top: 1px solid var(--border-o);
+    padding-top: 2rem; margin-top: 1rem;
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .meta-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; }
+  .meta-value { font-family: var(--mono); font-size: 13px; color: var(--purple); letter-spacing: 0.05em; }
+
+  main { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 5rem 4rem; }
+
+  .section-label {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--purple); margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--purple); }
+
+  h2 { font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+
+  .content-block { margin-bottom: 5rem; }
+
+  p { font-size: 0.95rem; color: var(--muted); line-height: 1.85; margin-bottom: 1.2rem; }
+  p strong { color: var(--text); font-weight: 700; }
+
+  /* SPEC TABLE */
+  .spec-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+  .spec-table tr { border-bottom: 1px solid rgba(167,112,255,0.1); }
+  .spec-table td { padding: 0.75rem 1rem; font-size: 0.85rem; }
+  .spec-table td:first-child { font-family: var(--mono); font-size: 11px; color: var(--purple); letter-spacing: 0.1em; text-transform: uppercase; width: 38%; }
+  .spec-table td:last-child { color: var(--text); }
+
+  /* COMPONENTS GRID */
+  .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1px; margin-bottom: 1.5rem; }
+  .comp-item { background: var(--bg3); border: 1px solid var(--border-o); padding: 1.2rem; transition: border-color 0.2s; }
+  .comp-item:hover { border-color: rgba(167,112,255,0.45); }
+  .comp-cat { font-family: var(--mono); font-size: 10px; color: var(--purple); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .comp-name { font-size: 0.88rem; color: var(--text); font-weight: 700; margin-bottom: 0.3rem; }
+  .comp-detail { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+  /* AXIS CARDS */
+  .axis-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; margin-bottom: 2rem; }
+  .axis-card { background: var(--bg3); border: 1px solid var(--border-o); padding: 1.5rem; text-align: center; transition: border-color 0.25s; }
+  .axis-card:hover { border-color: rgba(167,112,255,0.5); }
+  .axis-letter { font-family: var(--mono); font-size: 2rem; color: var(--purple); font-weight: 700; margin-bottom: 0.5rem; }
+  .axis-mech { font-size: 0.82rem; color: var(--text); font-weight: 700; margin-bottom: 0.3rem; }
+  .axis-detail { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+
+  /* PROCESS STEPS */
+  .process-list { display: flex; flex-direction: column; gap: 1px; }
+  .process-step { display: grid; grid-template-columns: 56px 1fr; background: var(--bg3); border: 1px solid var(--border-o); padding: 1.25rem 1.5rem; gap: 1.5rem; align-items: start; transition: border-color 0.2s; }
+  .process-step:hover { border-color: rgba(167,112,255,0.4); }
+  .step-num { font-family: var(--mono); font-size: 1.4rem; color: var(--purple); opacity: 0.5; font-weight: 700; line-height: 1; }
+  .step-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+  .step-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* RESULTS */
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
+  .result-item { background: var(--bg3); border: 1px solid var(--border-o); padding: 1.5rem; transition: border-color 0.2s; }
+  .result-item:hover { border-color: rgba(167,112,255,0.45); }
+  .result-num { font-family: var(--mono); font-size: 1.8rem; color: var(--purple); font-weight: 700; line-height: 1.1; margin-bottom: 0.3rem; }
+  .result-label { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+  /* SVG diagram placeholder */
+  .diagram-box {
+    width: 100%; padding: 3rem 2rem;
+    background: var(--bg2); border: 1px solid var(--border-o);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem; position: relative; overflow: hidden;
+  }
+  .diagram-box::after {
+    content: 'ADD PHOTO / DIAGRAM';
+    position: absolute; bottom: 12px; right: 16px;
+    font-family: var(--mono); font-size: 10px; color: rgba(167,112,255,0.3); letter-spacing: 0.15em;
+  }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.5rem; }
+  .tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border: 1px solid var(--border-o); color: var(--muted); background: rgba(167,112,255,0.03); }
+  .tag.hi { border-color: var(--purple); color: var(--purple); }
+
+  footer { position: relative; z-index: 1; padding: 2rem 4rem; border-top: 1px solid var(--border-o); display: flex; align-items: center; justify-content: space-between; }
+  .footer-text { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+  .footer-link { font-family: var(--mono); font-size: 11px; color: var(--purple); text-decoration: none; letter-spacing: 0.1em; }
+  .footer-link:hover { opacity: 0.8; }
+
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    main { padding: 3rem 1.5rem; }
+    .axis-grid { grid-template-columns: 1fr; }
+    .result-grid { grid-template-columns: 1fr; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">ADRIAN.ENG</a>
+  <a href="index.html" class="nav-back">All projects</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">04 — MSc Thesis Project</div>
+  <h1>Microscope<br><span>Inspection Table</span></h1>
+  <p class="hero-sub">A fully custom 3-axis CNC motorised stand for microstructural evaluation of 3D-printed surfaces — designed, fabricated and assembled from scratch as part of an MSc thesis in Advanced Mechatronics.</p>
+  <div class="meta-strip">
+    <div class="meta-item"><span class="meta-label">Type</span><span class="meta-value">MSc Thesis</span></div>
+    <div class="meta-item"><span class="meta-label">Year</span><span class="meta-value">2022 – 2024</span></div>
+    <div class="meta-item"><span class="meta-label">Institution</span><span class="meta-value">Politehnica Bucharest</span></div>
+    <div class="meta-item"><span class="meta-label">Grade</span><span class="meta-value">9.80 / 10</span></div>
+    <div class="meta-item"><span class="meta-label">Motion</span><span class="meta-value">3-Axis (X / Y / Z)</span></div>
+    <div class="meta-item"><span class="meta-label">Control</span><span class="meta-value">Arduino + GRBL</span></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <div class="content-block fade-in">
+    <div class="section-label">Overview</div>
+    <h2>Problem & Objective</h2>
+    <p>
+      Additive manufacturing — particularly FDM, SLS and SLM — produces complex parts whose surface integrity directly affects functional performance. Evaluating microstructural quality requires stable, repeatable, motorised positioning of a digital microscope across the specimen surface. Manual adjustment introduces operator error and makes systematic scanning impossible.
+    </p>
+    <p>
+      The objective of this thesis was to <strong>design, build and validate a fully custom 3-axis CNC inspection stand</strong> capable of automating the scanning process, enabling future implementation of micro-image stitching to generate high-resolution composite surface maps from sequential microscope captures.
+    </p>
+    <p>
+      The entire system — mechanical structure, motion hardware, electronics and firmware — was engineered from scratch using first-principles calculations, then fabricated and assembled in-house using laser cutting, TIG welding, 3D printing and manual machining.
+    </p>
+  </div>
+
+  <!-- MOTION SYSTEM -->
+  <div class="content-block fade-in">
+    <div class="section-label">Mechanical Design</div>
+    <h2>3-Axis Motion Architecture</h2>
+    <div class="axis-grid">
+      <div class="axis-card">
+        <div class="axis-letter">X</div>
+        <div class="axis-mech">Trapezoidal Lead Screw</div>
+        <div class="axis-detail">Ø8 mm, 2 mm pitch · Two Ø8 mm guide rails · 4× SC8UU linear bearings · NEMA 17 stepper</div>
+      </div>
+      <div class="axis-card">
+        <div class="axis-letter">Y</div>
+        <div class="axis-mech">GT2 Toothed Belt</div>
+        <div class="axis-detail">MGN15C linear rail · 20-tooth pulley · Belt tensioner with adjustable screw · NEMA 17 stepper</div>
+      </div>
+      <div class="axis-card">
+        <div class="axis-letter">Z</div>
+        <div class="axis-mech">C-Beam Gantry</div>
+        <div class="axis-detail">4080 aluminium extrusion · Anti-backlash T8 nut · V-slot wheels · NEMA 17 stepper — carries the microscope</div>
+      </div>
+    </div>
+    <p>
+      The structure is built on a <strong>3 mm laser-cut steel chassis</strong> (DD11C020DH), TIG-welded at critical junctions and painted RAL 9005. Guide rail parallelism on the X-axis was enforced using custom 3D-printed jigs to eliminate lateral deviation during assembly. Coupling between motors and screws uses bellows-type flexible shaft couplings to absorb misalignment without transmitting bending moments.
+    </p>
+    <p>
+      A required motor torque calculation was performed for the worst-case axis (X, carrying 4.5 kg). With a linear bearing friction coefficient of 0.01, the minimum torque required was <strong>0.146 Nm</strong> — well within the NEMA 17 HS4401S rated holding torque of 0.40 Nm.
+    </p>
+  </div>
+
+  <!-- SPECS -->
+  <div class="content-block fade-in">
+    <div class="section-label">Specifications</div>
+    <h2>System Parameters</h2>
+    <table class="spec-table">
+      <tr><td>Working volume</td><td>300 × 300 × 200 mm (X × Y × Z)</td></tr>
+      <tr><td>X-axis screw</td><td>Trapezoidal Ø8 mm, 2 mm/rev advance, L = 300 mm</td></tr>
+      <tr><td>Y-axis transmission</td><td>GT2 belt, 20-tooth pulley, MGN15C rail, L = 350 mm</td></tr>
+      <tr><td>Z-axis profile</td><td>4080 C-beam aluminium extrusion, T8 anti-backlash nut</td></tr>
+      <tr><td>Stepper motors</td><td>3× NEMA 17 HS4401S — 1.8°/step, 40 N·cm holding torque, 1.5 A</td></tr>
+      <tr><td>Drivers</td><td>3× DRV8825 — up to 1/32 microstep, 2.5 A max, 45 V max</td></tr>
+      <tr><td>Controller</td><td>Arduino UNO + CNC Shield V3, GRBL firmware</td></tr>
+      <tr><td>Interface</td><td>Universal G-code Sender (UGS) + PS5 controller via DS4Windows</td></tr>
+      <tr><td>Microscope</td><td>1600× digital, 640×480 / 1920×1440, USB, 8 LEDs, 30 FPS</td></tr>
+      <tr><td>Focus actuation</td><td>SG90 9g servo with custom 3D-printed gear engaging the focus ring</td></tr>
+      <tr><td>Power supply</td><td>HRB 4S Li-Po 14.8 V, 6000 mAh, 50C</td></tr>
+      <tr><td>Endstops</td><td>6× mechanical (X±, Y±, Z±)</td></tr>
+      <tr><td>Frame material</td><td>Laser-cut steel DD11C020DH (2 mm and 3 mm)</td></tr>
+      <tr><td>Total build cost</td><td>≈ 5,246 RON (components + labour)</td></tr>
+    </table>
+  </div>
+
+  <!-- KEY COMPONENTS -->
+  <div class="content-block fade-in">
+    <div class="section-label">Hardware</div>
+    <h2>Key Components</h2>
+    <div class="comp-grid">
+      <div class="comp-item">
+        <div class="comp-cat">Linear Motion X</div>
+        <div class="comp-name">SC8UU Bearing Blocks</div>
+        <div class="comp-detail">4× sealed LM8U bearings in anodised aluminium housing — 3.19 kN dynamic load rating</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-cat">Linear Motion Y</div>
+        <div class="comp-name">MGN15C Rail + Carriage</div>
+        <div class="comp-detail">300 mm stainless steel rail, hardened surface, compact low-profile carriage for high precision</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-cat">Linear Motion Z</div>
+        <div class="comp-name">C-Beam Gantry Kit</div>
+        <div class="comp-detail">4080 V-slot extrusion, 4× V-groove wheels with bearings, anti-backlash T8 nut block</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-cat">Stepper Driver</div>
+        <div class="comp-name">DRV8825</div>
+        <div class="comp-detail">Up to 1/32 microstep, adjustable current limit via trim-pot, thermal and overcurrent protection</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-cat">Focus Control</div>
+        <div class="comp-name">SG90 Servo + Custom Gear</div>
+        <div class="comp-detail">3D-printed gear interfaces with the microscope focus ring — enables automated Z-focus from GRBL</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-cat">Laser Cutting</div>
+        <div class="comp-name">TRUMPF TruLaser 2030</div>
+        <div class="comp-detail">Fibre laser — used to cut all 2 mm and 3 mm steel chassis parts to DXF drawings from AutoCAD</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-cat">Welding</div>
+        <div class="comp-name">TIG — Velt CUT 50</div>
+        <div class="comp-detail">Tungsten Inert Gas welding at 29 A without filler — Z-axis arm and chassis joints, post-weld painted</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-cat">3D Printing</div>
+        <div class="comp-name">Sovol SV06 Plus</div>
+        <div class="comp-detail">FDM — PLA+, 0.2 mm layer height, grid infill pattern. Used for mounts, jigs, cable brackets and gear</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANUFACTURING PROCESS -->
+  <div class="content-block fade-in">
+    <div class="section-label">Fabrication Process</div>
+    <h2>Build Sequence</h2>
+    <div class="process-list">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div>
+          <div class="step-title">CAD Design — Fusion 360</div>
+          <div class="step-desc">Full 3D parametric model of the stand designed in Fusion 360. All steel parts exported as DXF for laser cutting. 3D-printed parts sliced in PrusaSlicer with dual-colour first layer for visual assembly guidance.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <div>
+          <div class="step-title">Laser Cutting — TRUMPF TruLaser 2030 fibre</div>
+          <div class="step-desc">DD11C020DH steel cut to DXF drawings — 2 mm and 3 mm thicknesses. Parts cleaned with acetone, then drilled, countersunk and tapped for M3–M6 fasteners using a Bosch PBD 40 bench drill at 1200 rpm.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <div>
+          <div class="step-title">TIG Welding & Surface Finishing</div>
+          <div class="step-desc">Z-axis arm assembly welded from three interlocked steel pieces using notch-and-fit alignment. Post-weld: degreased, primed (Bostik), then painted RAL 9005 matt black for corrosion protection.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <div>
+          <div class="step-title">3D Printing & Custom Fixtures</div>
+          <div class="step-desc">All non-structural parts printed in PLA+ on Sovol SV06 Plus. Included: motor mounts, cable chain brackets, electronics enclosure with dual-filament colour markings, X-axis parallelism jigs cut from plexiglass on an 80W CO₂ laser.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">05</div>
+        <div>
+          <div class="step-title">Electronics Assembly & Wiring</div>
+          <div class="step-desc">Arduino UNO + CNC Shield V3 + 3× DRV8825 drivers wired to the stepper motors. 14.8 V Li-Po distributes power via bus bar to DRV8825s, two LM2596 step-down modules (5 V fan, 12 V LED strip) and the main switch.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">06</div>
+        <div>
+          <div class="step-title">Firmware & Control</div>
+          <div class="step-desc">GRBL firmware flashed to Arduino. Steps/mm calibrated per axis. UGS (Universal G-code Sender) used as the PC interface. PS5 controller mapped via DS4Windows for manual jogging. Homing sequence configured on all 6 endstops (X±, Y±, Z±).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="content-block fade-in">
+    <div class="section-label">Outcomes</div>
+    <h2>Results & Validation</h2>
+    <div class="result-grid">
+      <div class="result-item">
+        <div class="result-num">1600×</div>
+        <div class="result-label">Digital microscope magnification — 1920×1440 px resolution, USB interface</div>
+      </div>
+      <div class="result-item">
+        <div class="result-num">3-Axis</div>
+        <div class="result-label">Independent motorised XYZ motion — fully homed, G-code controlled</div>
+      </div>
+      <div class="result-item">
+        <div class="result-num">0.146 Nm</div>
+        <div class="result-label">Calculated minimum required torque (X-axis, worst case) vs 0.40 Nm motor rating</div>
+      </div>
+      <div class="result-item">
+        <div class="result-num">9.80</div>
+        <div class="result-label">MSc thesis grade — Politehnica University of Bucharest, 2024</div>
+      </div>
+    </div>
+    <p style="margin-top:1.5rem;">
+      The completed stand successfully automates microscope positioning across specimen surfaces. The modular architecture supports future integration of <strong>micro-image stitching</strong> — capturing sequential overlapping frames and compositing them into a single high-resolution surface map. This would transform the stand into a fully autonomous surface characterisation instrument suitable for QC in additive manufacturing workflows.
+    </p>
+    <div class="tag-row">
+      <span class="tag hi">MSc Thesis</span>
+      <span class="tag hi">Fusion 360</span>
+      <span class="tag">AutoCAD</span>
+      <span class="tag">FDM 3D Printing</span>
+      <span class="tag">CO₂ Laser</span>
+      <span class="tag">TIG Welding</span>
+      <span class="tag">Arduino</span>
+      <span class="tag">GRBL</span>
+      <span class="tag">DRV8825</span>
+      <span class="tag">NEMA 17</span>
+      <span class="tag">MGN15C</span>
+      <span class="tag">Steel Fabrication</span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span class="footer-text">© 2026 Adrian Florin Anton</span>
+  <a href="index.html" class="footer-link">← Back to portfolio</a>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

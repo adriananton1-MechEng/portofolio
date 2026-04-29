@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adrian Anton— Mechanical Engineer</title>
+<title>Adrian — Mechanical Engineer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
@@ -144,6 +144,16 @@
   .card-cta::after { content: '→'; transition: transform 0.2s; }
   .project-card:hover .card-cta::after { transform: translateX(4px); }
 
+  /* purple card variant */
+  .project-card--purple { border-color: rgba(167,112,255,0.2); }
+  .project-card--purple::before { background: #a770ff; }
+  .project-card--purple:hover { border-color: rgba(167,112,255,0.55); }
+  .card-img-placeholder--purple { background: linear-gradient(135deg, #0d0b14 0%, #130e1f 100%); border-bottom-color: rgba(167,112,255,0.2); }
+  .card-img-placeholder--purple::after { color: rgba(167,112,255,0.4); }
+  .card-num--purple { color: #a770ff; }
+  .tag--purple { border-color: rgba(167,112,255,0.4); color: #a770ff; background: rgba(167,112,255,0.05); }
+  .card-cta--purple { color: #a770ff; }
+
   /* ── SKILLS ── */
   #skills { background: var(--bg); }
   .skills-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
@@ -175,6 +185,81 @@
   .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.65s ease, transform 0.65s ease; }
   .fade-in.visible { opacity: 1; transform: none; }
 
+  /* ── CV SECTION ── */
+  #cv { background: var(--bg); }
+
+  .cv-layout { display: grid; grid-template-columns: 260px 1fr; gap: 5rem; align-items: start; }
+
+  /* sidebar */
+  .cv-sidebar { position: sticky; top: 6rem; }
+  .cv-sidebar-name { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.5rem; }
+  .cv-sidebar-name span { color: var(--accent); }
+  .cv-sidebar-role { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 2rem; }
+  .cv-sidebar-divider { height: 1px; background: var(--border); margin-bottom: 2rem; }
+  .cv-contact-item { display: flex; align-items: flex-start; gap: 10px; font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: none; padding: 8px 0; border-bottom: 1px solid rgba(0,212,255,0.06); letter-spacing: 0.05em; transition: color 0.2s; word-break: break-all; }
+  .cv-contact-item:hover { color: var(--accent); }
+  .cv-contact-item .ci-label { color: var(--accent); min-width: 14px; }
+  .cv-status { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.1em; margin-top: 1.5rem; }
+  .cv-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #00e676; animation: blink 2s ease infinite; flex-shrink: 0; }
+  @keyframes blink { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,230,118,0.4);} 50%{opacity:0.6;box-shadow:0 0 0 5px rgba(0,230,118,0);} }
+
+  /* main content */
+  .cv-block { margin-bottom: 3.5rem; }
+  .cv-block:last-child { margin-bottom: 0; }
+  .cv-block-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .cv-block-label::before { content: ''; display: inline-block; width: 16px; height: 1px; background: var(--accent); }
+
+  /* experience items */
+  .cv-exp-item { padding: 1.5rem; border: 1px solid var(--border); background: var(--bg3); margin-bottom: 1px; position: relative; overflow: hidden; transition: border-color 0.25s; }
+  .cv-exp-item::before { content: ''; position: absolute; left: 0; top: 0; width: 2px; height: 0; background: var(--accent); transition: height 0.35s ease; }
+  .cv-exp-item:hover { border-color: rgba(0,212,255,0.4); }
+  .cv-exp-item:hover::before { height: 100%; }
+  .cv-exp-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.4rem; flex-wrap: wrap; }
+  .cv-exp-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+  .cv-exp-period { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.1em; white-space: nowrap; padding: 3px 8px; border: 1px solid rgba(0,212,255,0.25); }
+  .cv-exp-company { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 1rem; }
+  .cv-exp-company span { color: var(--accent2); }
+  .cv-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+  .cv-bullets li { font-size: 0.82rem; color: var(--muted); line-height: 1.65; padding-left: 1.1rem; position: relative; }
+  .cv-bullets li::before { content: '—'; position: absolute; left: 0; color: rgba(0,212,255,0.35); }
+  .cv-tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 1rem; }
+  .cv-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border: 1px solid var(--border); color: var(--muted); background: rgba(0,212,255,0.03); }
+  .cv-tag.hi { border-color: rgba(0,212,255,0.3); color: var(--accent); }
+
+  /* education items */
+  .cv-edu-item { display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; padding: 1.25rem 1.5rem; border: 1px solid var(--border); background: var(--bg3); margin-bottom: 1px; transition: border-color 0.25s; }
+  .cv-edu-item:hover { border-color: rgba(0,212,255,0.35); }
+  .cv-edu-year { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.05em; line-height: 1.6; white-space: nowrap; padding-top: 2px; }
+  .cv-edu-degree { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+  .cv-edu-inst { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+  .cv-edu-note { font-family: var(--mono); font-size: 10px; color: var(--accent2); letter-spacing: 0.05em; }
+
+  /* skills two-col */
+  .cv-skills-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
+  .cv-skill-group { padding: 1.25rem 1.5rem; background: var(--bg3); border: 1px solid var(--border); }
+  .cv-skill-group-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+  .cv-skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.3rem; }
+  .cv-skill-list li { font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .cv-skill-list li::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--accent2); flex-shrink: 0; }
+
+  /* awards */
+  .cv-award-item { display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; padding: 1rem 0; border-bottom: 1px solid rgba(0,212,255,0.07); align-items: start; }
+  .cv-award-year { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.05em; padding-top: 3px; }
+  .cv-award-prize { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(0,212,255,0.3); padding: 2px 7px; display: inline-block; margin-bottom: 0.35rem; }
+  .cv-award-title { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+  .cv-award-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+  /* cert */
+  .cv-cert-item { padding: 1.2rem 1.5rem; border: 1px solid var(--border); background: var(--bg3); margin-bottom: 1px; display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; align-items: start; transition: border-color 0.25s; }
+  .cv-cert-item:hover { border-color: rgba(255,107,53,0.35); }
+  .cv-cert-badge { font-family: var(--mono); font-size: 10px; color: var(--accent2); border: 1px solid rgba(255,107,53,0.3); padding: 3px 8px; white-space: nowrap; letter-spacing: 0.08em; }
+
+  @media (max-width: 900px) {
+    .cv-layout { grid-template-columns: 1fr; gap: 3rem; }
+    .cv-sidebar { position: static; }
+    .cv-skills-2col { grid-template-columns: 1fr; }
+  }
+
   @media (max-width: 768px) {
     nav { padding: 1rem 1.5rem; }
     #hero { padding: 6rem 1.5rem 3rem; }
@@ -188,7 +273,7 @@
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">ENG. Adrian ANTON</a>
+  <a href="index.html" class="nav-logo">ADRIAN.ENG</a>
   <ul class="nav-links">
     <li><a href="#projects">Projects</a></li>
     <li><a href="#skills">Skills</a></li>
@@ -251,7 +336,7 @@
         <div class="card-cta">View full project</div>
       </div>
     </a>
-   
+
     <a href="project-cad.html" class="project-card fade-in">
       <div class="card-img-placeholder">
         <svg width="100" height="60" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -298,6 +383,43 @@
       </div>
     </a>
 
+    <a href="project-microscope.html" class="project-card project-card--purple fade-in">
+      <div class="card-img-placeholder card-img-placeholder--purple">
+        <svg width="100" height="60" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="50" y1="52" x2="50" y2="18" stroke="#a770ff" stroke-width="2"/>
+          <line x1="38" y1="52" x2="62" y2="52" stroke="#a770ff" stroke-width="2"/>
+          <line x1="50" y1="28" x2="34" y2="28" stroke="#a770ff" stroke-width="1.5"/>
+          <line x1="34" y1="28" x2="34" y2="38" stroke="#a770ff" stroke-width="1.5"/>
+          <circle cx="34" cy="41" r="4" stroke="#a770ff" stroke-width="1.5"/>
+          <rect x="22" y="43" width="24" height="3" stroke="#a770ff" stroke-width="1"/>
+          <rect x="44" y="14" width="12" height="8" stroke="#a770ff" stroke-width="1.5"/>
+          <line x1="26" y1="43" x2="26" y2="46" stroke="#a770ff" stroke-width="0.5" opacity="0.5"/>
+          <line x1="30" y1="43" x2="30" y2="46" stroke="#a770ff" stroke-width="0.5" opacity="0.5"/>
+          <line x1="34" y1="43" x2="34" y2="46" stroke="#a770ff" stroke-width="0.5" opacity="0.5"/>
+          <line x1="38" y1="43" x2="38" y2="46" stroke="#a770ff" stroke-width="0.5" opacity="0.5"/>
+          <line x1="70" y1="48" x2="82" y2="48" stroke="#a770ff" stroke-width="1" opacity="0.6"/>
+          <line x1="70" y1="48" x2="70" y2="36" stroke="#a770ff" stroke-width="1" opacity="0.6"/>
+          <line x1="70" y1="48" x2="76" y2="54" stroke="#a770ff" stroke-width="1" opacity="0.6"/>
+          <text x="83" y="50" font-size="5" fill="#a770ff" opacity="0.7" font-family="monospace">X</text>
+          <text x="68" y="34" font-size="5" fill="#a770ff" opacity="0.7" font-family="monospace">Z</text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-num card-num--purple">04 — MSc Thesis</div>
+        <div class="card-title">Microscope Inspection Table</div>
+        <p class="card-desc">3-axis CNC motorised stand for digital microscopy of 3D-printed surfaces. Designed, fabricated and assembled from scratch — steel chassis, stepper-driven XYZ motion, Arduino/GRBL control, 1600× digital microscope.</p>
+        <div class="card-tags">
+          <span class="tag tag--purple">MSc Thesis</span>
+          <span class="tag">Fusion 360</span>
+          <span class="tag">3D Printing</span>
+          <span class="tag">Laser Cutting</span>
+          <span class="tag">Arduino</span>
+          <span class="tag">GRBL</span>
+        </div>
+        <div class="card-cta card-cta--purple">View full project</div>
+      </div>
+    </a>
+
   </div>
 </section>
 
@@ -336,21 +458,21 @@
   <h2>Get in touch</h2>
   <div class="contact-layout">
     <div>
-      <p class="contact-intro">Open to full-time roles, and engineering collaborations. If you're working on something interesting — reach out.</p>
+      <p class="contact-intro">Open to PhD collaborations, engineering roles, and technical partnerships. Working at the intersection of robotics, mechanical design, and emerging fabrication technologies — reach out if you're building something that moves.</p>
       <a href="mailto:adrianflorinanton1@gmail.com" class="contact-link"><span class="dot"></span>adrianflorinanton1@gmail.com</a>
-      <a href="https://linkedin.com/in/adriananton1" target="_blank" class="contact-link"><span class="dot"></span>linkedin.com/in/adriananton1</a>
-      <a href="https://github.com/adriananton1-MechEng" target="_blank" class="contact-link"><span class="dot"></span>github.com/adriananton1-MechEng</a>
+      <a href="tel:+40737034363" class="contact-link"><span class="dot"></span>(+40) 737 034 363</a>
+      <a href="https://www.linkedin.com/in/adrian-anton-61a741213" target="_blank" class="contact-link"><span class="dot"></span>linkedin.com/in/adrian-anton</a>
     </div>
     <div class="cv-box fade-in">
       <div class="cv-box-title">Curriculum Vitae</div>
-      <p>Download my CV to see my full academic background, work experience, and project list in one place.</p>
-      <a href="cv.pdf" download class="btn-primary">Download CV (PDF)</a>
+      <p>Full academic background, work experience, and project list — all in one place.</p>
+      <a href="cv.html" class="btn-primary">View full CV</a>
     </div>
   </div>
 </section>
 
 <footer>
-  <span class="footer-text">© 2022 Adrian Anton — Mechanical Engineer</span>
+  <span class="footer-text">© 2026 Adrian Florin Anton — Mechanical Engineer</span>
   <span class="footer-text">Bucharest, Romania</span>
 </footer>
 
